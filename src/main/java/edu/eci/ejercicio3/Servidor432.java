@@ -16,8 +16,9 @@ public class Servidor432 {
 			
 			serverSocket = new ServerSocket(35008);
 		} catch (IOException e1) {
+			try {serverSocket.close();}  catch(IOException ei) {}
 			e1.printStackTrace();
-			System.err.println("Could not listen on port: 35001.");
+			System.err.println("Could not listen on port: 35000.");
 		    System.exit(1);
 			
 		}
@@ -25,57 +26,57 @@ public class Servidor432 {
 		try {
 			clientSocket = serverSocket.accept();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			try {serverSocket.close(); clientSocket.close();}  catch(IOException ei) {}
+			System.err.println("the conection has failed");
 			e1.printStackTrace();
 		}
 		
 		try {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
-			int inNumero = 0;
+			double inNumber = 0;
 			
 			String inputLine;
 			
-			String funcionActual = "cos";
+			String actualFunction = "cos";
 			while ((inputLine = in .readLine()) != null) {
 				
 				boolean isNumeric = inputLine.chars().allMatch( Character::isDigit );
-				
+				int isDouble = inputLine.indexOf(".");
+				System.out.println(isDouble);
 				if(inputLine.equals("fun:cos")) {
-					funcionActual = "cos";
+					actualFunction = "cos";
 				}else if(inputLine.equals("fun:sin")) {
-					funcionActual = "sin";
+					actualFunction = "sin";
 				}else if(inputLine.equals("fun:tan")) {
-					funcionActual = "tan";
-				}else if(isNumeric) {
-					inNumero =  Integer.parseInt(inputLine);
+					actualFunction = "tan";
+				}else if(isNumeric || isDouble!=-1) {
+					inNumber =  Double.parseDouble(inputLine);
+					
 				}else System.out.println("no es valido");
-				out.println(calcularOperacion(funcionActual,inNumero));
+				out.println(calcularOperacion(actualFunction,inNumber));
 			 }
-			
-			
+						
 			out.close(); in .close();
 			clientSocket.close();
 			serverSocket.close();
 			
 		} catch (NumberFormatException | IOException e) {
-			// TODO Auto-generated catch block
+			try {serverSocket.close(); clientSocket.close();}  catch(IOException ei) {}
+			System.err.println("Failed to caluculate the operation");
 			e.printStackTrace();
 		}
-		
 	}
 	
-	private static double calcularOperacion(String operacion,int numero) {
+	private static double calcularOperacion(String operacion,double numero) {
 		
 		switch (operacion) {
 		case "cos":
-			System.out.println("Cos");
-			return Math.cos((double)numero);
+			return Math.cos(numero);
 		case "sin":
-			
-			return Math.sin((double)numero);
+			return Math.sin(numero);
 		case "tan":	
-			return Math.tan((double)numero);
+			return Math.tan(numero);
 		}
 		
 		return 0;

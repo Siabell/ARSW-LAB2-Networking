@@ -26,14 +26,13 @@ public class Cliente432 {
 		  String userInput;
 		try {
 			while ((userInput = stdIn.readLine()) != null) {
-				System.out.println("aaaa");
+				
 				out.println(userInput);
 				System.out.println(in.readLine());
 			}
 			echoSocket.close();
 		} catch (IOException e) {
 			echoSocket.close();
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
