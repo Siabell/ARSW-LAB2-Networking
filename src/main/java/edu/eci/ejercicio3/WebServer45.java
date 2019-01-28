@@ -42,13 +42,16 @@ public class WebServer45 {
 			dataOut = new BufferedOutputStream(clientSocket.getOutputStream());
 			String inputLine, outputLine;
 			inputLine = in.readLine();
+			System.out.println(inputLine);
 			
-			StringTokenizer st = new StringTokenizer(inputLine);
 			try {
+				StringTokenizer st = new StringTokenizer(inputLine);
 				String method = st.nextToken();
+				
 				fileRequest = st.nextToken();
-				System.out.println(inputLine);
 				while ((inputLine = in .readLine()) != null) {
+					
+					
 					System.out.println("Received: " + inputLine);
 					if (! in .ready()) {
 						break;
@@ -58,7 +61,9 @@ public class WebServer45 {
 				if(fileRequest.endsWith("/")) {
 					fileRequest = "paginasPrueba/Index.html";
 				}else {
-					fileRequest=fileRequest.substring(1);
+					
+					fileRequest="paginasPrueba/"+fileRequest.substring(1);
+					System.out.println(fileRequest);
 				}
 				
 				InputStream inStream=new FileInputStream(fileRequest);
@@ -72,7 +77,7 @@ public class WebServer45 {
 				
 				byte[]fileData = new byte[5000];
 				int n;
-		        while ((n=inStream.read(fileData))>0) out.write(fileData, 0, n);
+		        while ((n = inStream.read(fileData))>0) out.write(fileData, 0, n);
 		        out.close();
 				
 				out.close(); in .close();
