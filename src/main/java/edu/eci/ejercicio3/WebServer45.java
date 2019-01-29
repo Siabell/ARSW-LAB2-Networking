@@ -28,7 +28,6 @@ public class WebServer45 {
 		for( ; ; ) {
 			Socket clientSocket = null;
 			try {
-				
 				System.out.println("Listo para recibir ...");
 				clientSocket = serverSocket.accept();
 				
