@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,11 +28,16 @@ public class ClienteDatagrama implements Runnable{
 				InetAddress address = InetAddress.getByName("127.0.0.1");
 				DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
 				socket.send(packet);
-		
 				packet = new DatagramPacket(buf, buf.length);
-				socket.receive(packet);
-				String received = new String(packet.getData(), 0, packet.getLength());
-				System.out.println("Date: " + received);
+				try {
+					socket.setSoTimeout(5000);
+					socket.receive(packet);
+					String received = new String(packet.getData(), 0, packet.getLength());
+					System.out.println("Date: " + received);
+				}catch (SocketTimeoutException e) {
+					//timeout
+					//System.out.println("entraaaa ");
+				}
 				
 			} catch (SocketException ex) {
 				Logger.getLogger(ClienteDatagrama.class.getName()).log(Level.SEVERE, null, ex);
